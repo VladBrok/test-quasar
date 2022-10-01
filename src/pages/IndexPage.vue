@@ -1,7 +1,10 @@
 <template>
   <q-page class="q-mx-auto" style="max-width: 17rem; min-height: unset">
     <h1 class="q-py-xl text-h5 text-center">
-      Введите своё имя, и мы решим, можно ли Вам войти
+      <span v-if="answer !== 'no'"
+        >Введите своё имя, и мы решим, можно ли Вам войти</span
+      >
+      <span v-else class="text-negative">Вход запрещен.</span>
     </h1>
 
     <q-form @submit="onSubmit" class="q-gutter-sm">
@@ -15,6 +18,7 @@
 
       <div>
         <q-btn
+          :disable="isLoading"
           label="Вход"
           type="submit"
           color="primary"
@@ -34,14 +38,23 @@ export default defineComponent({
   data() {
     return {
       name: '',
+      answer: '',
+      isLoading: false,
     };
   },
   methods: {
     async onSubmit() {
+      this.isLoading = true;
       const {
         data: { answer },
       } = await api.get('');
-      console.log(answer);
+
+      this.isLoading = false;
+      this.answer = answer;
+
+      if (answer === 'yes') {
+        this.$router.push('/dashboard');
+      }
     },
   },
 });
