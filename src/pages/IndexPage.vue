@@ -45,15 +45,18 @@ export default defineComponent({
   methods: {
     async onSubmit() {
       this.isLoading = true;
-      const {
-        data: { answer },
-      } = await api.get('');
+      try {
+        const {
+          data: { answer },
+        } = await api.get('yes-no');
 
-      this.isLoading = false;
-      this.answer = answer;
-
-      if (answer === 'yes') {
-        this.$router.push('/dashboard');
+        if (answer === 'yes') {
+          this.$router.push('/dashboard');
+        } else {
+          this.answer = answer;
+        }
+      } finally {
+        this.isLoading = false;
       }
     },
   },
