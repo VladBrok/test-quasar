@@ -44,6 +44,8 @@ export default defineComponent({
   },
   methods: {
     async onSubmit() {
+      console.log(`is production: ${process.env.PROD}`);
+
       this.isLoading = true;
       try {
         const {
